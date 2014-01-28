@@ -1,16 +1,19 @@
-#define DELAY_100_US         (100)               /* DelayCount value for delay of 100 micro seconds. */
-#define DELAY_500_MS         (500)           /* DelayCount value for delay of 500 milliseconds. */
+#define DELAY_100_US         (100)              /* DelayCount value for delay of 100 micro seconds. */
+#define DELAY_500_MS         (500)              /* DelayCount value for delay of 500 milliseconds. */
+#define DELAY_4625           (4625)             /* Delay of 4625 microseconds. */
+#define DELAY_1325           (1325)             /* Delay of 1325 microseconds. */
+#define DELAY_675            (675)              /* Delay of 675 microseconds. */
+#define DELAY_17             (17)               /* Delay of 17 microseconds. */
+#define DELAY_KEY            (DELAY_500_MS)     /* Delay in between 2 different keys. */
+#define DELAY_IDENTICAL_KEY  (DELAY_500_MS * 6) /* Delay in between 2 identical keys. */
 
-#define DELAY_4625           (4625)        /* Delay of 4625 microseconds. */
-#define DELAY_1325           (1325)         /* Delay of 1325 microseconds. */
-#define DELAY_675            (675)         /* Delay of 675 microseconds. */
-#define DELAY_17             (17)                /* Delay of 17 microseconds. */
-
-#define DELAY_KEY            (DELAY_500_MS)      /* Delay in between 2 different keys. */
-#define DELAY_IDENTICAL_KEY  (DELAY_500_MS * 6)  /* Delay in between 2 identical keys. */
-
+/* 
+   Arduino Direct Access to pins:
+   This is needed since a simple digitalWrite() can take more than 200 cycles.
+   This means that arduino can take up to 17 microseconds to set a port state and we work with
+   delays on the 17 microseconds average so it recomended to work like that
+   */
 #define CLR(x,y) (x&=(~(1<<y)))
-
 #define SET(x,y) (x|=(1<<y))
 
 /*
@@ -482,13 +485,9 @@ void irTransmitKey(unsigned int key)
          for (pulse = 0; pulse < IR_PULSES_PER_BLOCK; pulse++)
          {
            
-           SET(PORTB,5);                   /* IR LED on. */
-           delayMicroseconds(17);
-           
-           
-                CLR(PORTB,5);             /* IR LED off. */
-
-            
+            SET(PORTB,5);                   /* IR LED on. */
+            delayMicroseconds(17);
+            CLR(PORTB,5);             /* IR LED off. */
             delayMicroseconds(15);
          }
       
@@ -498,18 +497,14 @@ void irTransmitKey(unsigned int key)
          else if (*pntr == 1)
          {
                  delayMicroseconds(DELAY_675-5);
-               
          }
          else if (*pntr == 2)
          {
                  delayMicroseconds(DELAY_1325-15);
-               
-
          }
          else if (*pntr == 3)
          {
                      delayMicroseconds(DELAY_4625-55);
-             
          }
          pntr++;
       }
@@ -520,11 +515,14 @@ void irTransmitKey(unsigned int key)
 
 void setup()
 {
-  pinMode(13, OUTPUT);
-  /*
-  irTransmitKey(IR_KEY_F1);
+  pinMode(13, OUTPUT);           //If the IR is on port 13
+  irTransmitKey(IR_KEY_F1);      //Start edit mode
   delay(500);
-  irTransmitKey(IR_KEY_CAPS);
+  
+  // Here we just write the message we want
+  // TODO: Use serial device to program the ball
+  
+  irTransmitKey(IR_KEY_CAPS);   
   delay(500);
   irTransmitKey(IR_KEY_M);
   delay(500);
@@ -584,179 +582,9 @@ void setup()
   delay(500);
   irTransmitKey(IR_KEY_Y);
   delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  irTransmitKey(IR_KEY_2ND);
-  delay(500);
-  irTransmitKey(IR_KEY_V);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  irTransmitKey(IR_KEY_CAPS);
-  delay(500);
-  irTransmitKey(IR_KEY_F);
-  delay(500);
-  irTransmitKey(IR_KEY_E);
-  delay(500);
-  irTransmitKey(IR_KEY_S);
-  delay(500);
-  irTransmitKey(IR_KEY_T);
-  delay(500);
-  irTransmitKey(IR_KEY_I);
-  delay(500);
-  irTransmitKey(IR_KEY_V);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_CAPS);
-  delay(500);
-  irTransmitKey(IR_KEY_I);
-  delay(500);
-  irTransmitKey(IR_KEY_CAPS);
-  delay(500);
-  irTransmitKey(IR_KEY_N);
-  delay(500);
-  irTransmitKey(IR_KEY_F1);
-  delay(500);
-  */
-  
-  
-
-  delay(500);
- 
-  //Apaga();
- 
-  irTransmitKey(IR_KEY_CAPS);
-  delay(500);
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_E);
-  delay(500);
-  irTransmitKey(IR_KEY_G);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
   delay(500);
   
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_Y);
-  delay(500);
-  irTransmitKey(IR_KEY_R);
-  delay(500);
-  irTransmitKey(IR_KEY_I);
-  delay(500);
-  irTransmitKey(IR_KEY_C);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  
-  irTransmitKey(IR_KEY_T);
-  delay(500);
-  irTransmitKey(IR_KEY_R);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_N);
-  delay(500);
-  irTransmitKey(IR_KEY_S);
-  delay(500);
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_T);
-  delay(500);
-  irTransmitKey(IR_KEY_I);
-  delay(500);
-  irTransmitKey(IR_KEY_O);
-  delay(500);
-  irTransmitKey(IR_KEY_N);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  
-  irTransmitKey(IR_KEY_T);
-  delay(500);
-  irTransmitKey(IR_KEY_R);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_D);
-  delay(500);
-  irTransmitKey(IR_KEY_U);
-  delay(500);
-  irTransmitKey(IR_KEY_Ç);
-  delay(500);
-  irTransmitKey(IR_KEY_3RD);
-  delay(500);
-  irTransmitKey(IR_KEY_5);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_O);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_E);
-  delay(500);
-  irTransmitKey(IR_KEY_G);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  
-  irTransmitKey(IR_KEY_D);
-  delay(500);
-  irTransmitKey(IR_KEY_E);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  
-  irTransmitKey(IR_KEY_L);
-  delay(500);
-  irTransmitKey(IR_KEY_E);
-  delay(500);
-  irTransmitKey(IR_KEY_T);
-  delay(500);
-  irTransmitKey(IR_KEY_R);
-  delay(500);
-  irTransmitKey(IR_KEY_A);
-  delay(500);
-  irTransmitKey(IR_KEY_S);
-  delay(500);
-  irTransmitKey(IR_KEY_SPACE);
-  delay(500);
-  
-  delay(500);
-    irTransmitKey(IR_KEY_2ND);
-  delay(500);
-  irTransmitKey(IR_KEY_F);
-  delay(500);
- 
-   irTransmitKey(IR_KEY_F1);
-  delay(500);
-  
-  
-  delay(500);
-  
-  //
-  delay(500);
-  
-  //Apaga();
+  //Delete();
 }
 
 void loop()
@@ -765,7 +593,8 @@ void loop()
     
 }
 
-void Apaga()
+//This method will delete the characters that already are present on the magicball
+void Delete()
 {
   irTransmitKey(IR_KEY_F1);
   delay(500);
